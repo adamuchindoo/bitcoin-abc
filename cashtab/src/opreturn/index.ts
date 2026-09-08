@@ -238,6 +238,25 @@ export const parseOpReturnRaw = (opReturnRaw: string): ParsedOpReturnRaw => {
             // <POWR> <OP_0 version> <OP_N action> [payload pushes]
             return parsePowOpReturnRaw(stackArray, opReturnRaw);
         }
+        case opReturn.appPrefixesHex.xecv: {
+            // Spec: doc/standards/xecvibe.md
+            // <XECV> <utf8 memo 1–75 bytes>
+            if (stackArray.length !== 2) {
+                parsed.protocol = 'Invalid XecVibe';
+                parsed.data = opReturnRaw;
+                return parsed;
+            }
+            const memoBytes = Buffer.from(stackArray[1], 'hex');
+            const memo = memoBytes.toString('utf8');
+            if (memoBytes.length < 1 || memoBytes.length > 75) {
+                parsed.protocol = 'Invalid XecVibe';
+                parsed.data = opReturnRaw;
+                return parsed;
+            }
+            parsed.protocol = 'XecVibe';
+            parsed.data = `Memo: ${memo}`;
+            return parsed;
+        }
         case opReturn.appPrefixesHex.authPrefixHex: {
             // eCash Chat auth: lokad + random challenge bytes
             parsed.protocol = 'Auth';

@@ -554,6 +554,32 @@ export const opReturnVectors = {
                 },
             },
             {
+                description: 'XecVibe payment with 32-byte hex memo',
+                opReturnRaw:
+                    '0458454356203466323030643335303466353461313361346463383536643530663433303835',
+                returned: {
+                    protocol: 'XecVibe',
+                    data: 'Memo: 4f200d3504f54a13a4dc856d50f43085',
+                },
+            },
+            {
+                description: 'Invalid XecVibe (missing memo)',
+                opReturnRaw: '0458454356',
+                returned: {
+                    protocol: 'Invalid XecVibe',
+                    data: '0458454356',
+                },
+            },
+            {
+                description: 'Invalid XecVibe (extra push after memo)',
+                opReturnRaw:
+                    '04584543562034663230306433353034663534613133613464633835366435306634333038350b786563766962652e636f6d',
+                returned: {
+                    protocol: 'Invalid XecVibe',
+                    data: '04584543562034663230306433353034663534613133613464633835366435306634333038350b786563766962652e636f6d',
+                },
+            },
+            {
                 description: 'eCash Chat Auth lokad with challenge bytes',
                 opReturnRaw:
                     '0461757468140644ad85a538657c033e36ce5a3c8cf26076591f',

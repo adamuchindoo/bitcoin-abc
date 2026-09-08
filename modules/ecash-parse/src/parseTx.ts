@@ -654,6 +654,28 @@ export const parseTx = (tx: Tx, hashes: string[]): ParsedTx => {
                     }
                     break;
                 }
+                case opReturn.appPrefixesHex.xecv: {
+                    // Spec: doc/standards/xecvibe.md
+                    // <XECV> <utf8 memo 1–75 bytes>
+                    const app = 'XecVibe';
+                    if (stackArray.length !== 2) {
+                        appActions.push({ lokadId, app, isValid: false });
+                        break;
+                    }
+                    const memoBytes = Buffer.from(stackArray[1], 'hex');
+                    const memo = memoBytes.toString('utf8');
+                    if (memoBytes.length < 1 || memoBytes.length > 75) {
+                        appActions.push({ lokadId, app, isValid: false });
+                        break;
+                    }
+                    appActions.push({
+                        lokadId,
+                        app,
+                        isValid: true,
+                        action: { memo },
+                    });
+                    break;
+                }
                 default: {
                     // Test for some sort of lokad id
                     const LOKAD_BYTES_STR_LENGTH = 8;
