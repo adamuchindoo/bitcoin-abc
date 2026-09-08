@@ -410,12 +410,7 @@ export const createQuoteRouter = (deps: QuoteRouteDeps): Router => {
                         from: reserves.reserveIn.toString(),
                         to: reserves.reserveOut.toString(),
                     },
-                    priceImpactPct: priceImpactPct(
-                        amountInAtoms,
-                        quote.amountOut,
-                        reserves.reserveIn,
-                        reserves.reserveOut,
-                    ),
+                    priceImpactPct: priceImpactPct(spotRate, effectiveRate),
                 };
                 res.status(200).json(body);
             } catch (error: unknown) {

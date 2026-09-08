@@ -8,8 +8,7 @@
  * takes a ready pool, applies contributions, and returns the assembled
  * unsigned tx.
  *
- * No Chronik or signing — networked hello/join/commit is `runWireRound`
- * in `client/wire.ts`.
+ * No TCP/TLS, Chronik, or signing — those land in follow-up diffs.
  */
 import type { AssembledAlpSend } from '../tx/assemble.js';
 import { OneShotRound } from '../coordinator/round.js';

@@ -598,14 +598,7 @@ export async function serveCovertPeer(
         payload: Record<string, unknown>,
     ) => { ok: true } | { ok: false; message: string } = () => ({ ok: true }),
 ): Promise<void> {
-    let types: ProtoTypes;
-    try {
-        types = await getTypes();
-    } catch {
-        // Callers use `void serveCovertPeer(...)`; never reject.
-        conn.close();
-        return;
-    }
+    const types = await getTypes();
     while (!conn.destroyed) {
         let raw: Buffer;
         try {

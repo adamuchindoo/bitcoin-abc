@@ -18,9 +18,12 @@ import {
     getSwapFailedMessage,
     getSwapSuccessfulMessage,
 } from '../ops/telegramMessages';
-import { quoteExactIn } from '../pricing/quotes';
+import { quoteExactIn, spotToPerWholeFrom } from '../pricing/quotes';
 import { pairPricingReserves } from '../pricing/reserves';
-import { priceImpactPct } from '../pricing/templates';
+import {
+    effectiveRateToPerWholeFrom,
+    priceImpactPct,
+} from '../pricing/templates';
 import { assertConfiguredPair } from './quotes';
 import {
     humanExchangeRate,
@@ -428,11 +431,23 @@ export const createSettleRouter = (deps: SettleRouteDeps): Router => {
                     const quote = quoteExactIn(priceLegAtoms, reserves, feePct);
                     const expectedToAtoms = quote.amountOut;
                     if (priceLegAtoms > 0n) {
+                        const fromDecimals =
+                            tradedTokens.get(fromTokenId)?.decimals ?? 0;
+                        const toDecimals =
+                            tradedTokens.get(toTokenId)?.decimals ?? 0;
                         tradePriceImpactPct = priceImpactPct(
-                            priceLegAtoms,
-                            swap.atomsTo,
-                            reserves.reserveIn,
-                            reserves.reserveOut,
+                            spotToPerWholeFrom(
+                                reserves.reserveIn,
+                                reserves.reserveOut,
+                                fromDecimals,
+                                toDecimals,
+                            ),
+                            effectiveRateToPerWholeFrom(
+                                priceLegAtoms,
+                                swap.atomsTo,
+                                fromDecimals,
+                                toDecimals,
+                            ),
                         );
                     }
 

@@ -100,12 +100,8 @@ const parseTxsForHistory = async (
             }
         }
 
-        try {
-            (tx as CashtabTx).parsed = parseTx(tx, hashes);
-            history.push(tx as CashtabTx);
-        } catch (err) {
-            console.error(`Error parsing tx ${tx.txid} for history`, err);
-        }
+        (tx as CashtabTx).parsed = parseTx(tx, hashes);
+        history.push(tx as CashtabTx);
     }
     return history;
 };

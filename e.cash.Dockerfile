@@ -6,7 +6,7 @@ FROM node:22-trixie-slim
 WORKDIR /app
 
 # Install pnpm
-RUN npm install -g pnpm@11.0.8
+RUN npm install -g pnpm
 
 # Copy workspace files
 COPY pnpm-workspace.yaml .
@@ -20,9 +20,6 @@ COPY web/e.cash/ ./web/e.cash
 
 ARG PREVIEW_BUILD=next.config.ts
 COPY web/e.cash/$PREVIEW_BUILD ./web/e.cash/next.config.ts
-
-# Create the .env file if it doesn't exist
-RUN if [ ! -f web/e.cash/.env ]; then cp web/e.cash/env.sample web/e.cash/.env; fi
 
 RUN pnpm install --frozen-lockfile --ignore-scripts
 

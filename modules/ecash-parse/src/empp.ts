@@ -36,15 +36,6 @@ export const getEmppAppActions = (stackArray: string[]): AppAction[] => {
 };
 
 export const getEmppAppAction = (push: string): AppAction | undefined => {
-    try {
-        return parseEmppAppAction(push);
-    } catch {
-        // consume() throws when the push is shorter than the requested bytes
-        return undefined;
-    }
-};
-
-const parseEmppAppAction = (push: string): AppAction | undefined => {
     const lokadBytes = 4;
     const emppStack = { remainingHex: push };
     const lokadId = consume(emppStack, lokadBytes);
@@ -366,7 +357,6 @@ const parseEmppAppAction = (push: string): AppAction | undefined => {
         }
     }
 };
-
 export const getXecxAppAction = (xecxEmppStack: {
     remainingHex: string;
 }): XecxAction | UnknownAction => {
